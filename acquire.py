@@ -1,19 +1,6 @@
-# ignore warnings
-import warnings
-warnings.filterwarnings("ignore")
-
-# Wrangling
+##### IMPORTS #####
 import pandas as pd
 import numpy as np
-import scipy.stats as stats
-
-from sklearn.impute import SimpleImputer
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import MinMaxScaler
-
-# Visualizing
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 import os
 from env import host, username, password
@@ -73,23 +60,32 @@ def get_zillow_data():
     
     return df
 
-def overview(df):
+def summarize(df):
     '''
-    This function returns the shape and info of the df. It also includes a breakdown of the number of unique values
-    in each column to determine which are categorical/discrete, and which are numerical/continuous. Finally, it returns
-    a breakdown of the statistics on all numerica columns.
+    summarize 
     '''
-    print(f'This dataframe has {df.shape[0]} rows and {df.shape[1]} columns.')
-    print('----------------------------------')
-    print('')
+    print('==============================================')
+    print('DataFrame head: ')
+    print(df.head(3))
+    print('==============================================')
+    print('DataFrame info: ')
     print(df.info())
-    print('----------------------------------')
-    print('')
-    print('Unique value counts of each column')
-    print('')
-    print(df.nunique())
-    print('----------------------------------')
-    print('')
-    print('Stats on Numeric Columns')
-    print('')
+    print('==============================================')
+    print('DataFrame description: ')
     print(df.describe())
+    num_col = [col for col in df.columns if df[col].dtype!='O']
+    cat_col = [col for col in df.columns if col not in num_col]
+    print('==============================================')
+    print('DataFrame value counts: ')
+    for col in df.columns:
+        if col in cat_col:
+            print(df[col].value_counts())
+        else:
+            print(df[col].value_counts(bins=10, sort=False))
+    print('==============================================')
+    print('nulls in dataframe by column: ')
+    print(nulls_by_col(df))
+    print('==============================================')
+    print('nulls in dataframe by row: ')
+    print(cols_missing(df))
+    
