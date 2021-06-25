@@ -50,18 +50,19 @@ def get_zillow_data():
     if there is no csv file, calls new_zillow_data
     '''
     
-    if os.path.isfile('zillow.csv'):
+    if os.path.isfile('zillow_cluster.csv'):
         
-        df = pd.read_csv('zillow.csv', index_col=0)
+        df = pd.read_csv('zillow_cluster.csv', index_col=0)
         
     else:
         
         df = new_zillow_data()
         
-        df.to_csv('zillow.csv')
+        df.to_csv('zillow_cluster.csv')
     
     return df
 
+##### SUMMARY FUNCTIONS #####
 def nulls_by_col(df):
     '''
     This function determines how many null values there are in each column, and returns a pandas DataFrame
