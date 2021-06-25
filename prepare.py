@@ -58,6 +58,35 @@ def summarize(df):
     print('nulls in dataframe by row: ')
     print(nulls_by_row(df))
     
+def miss_dup_values(df):
+    '''
+    this function takes a dataframe as input and will output metrics for missing values and duplicated rows, 
+    and the percent of that column that has missing values and duplicated rows
+    '''
+        # Total missing values
+    mis_val = df.isnull().sum()
+        # Percentage of missing values
+    mis_val_percent = 100 * df.isnull().sum() / len(df)
+        #total of duplicated
+    dup = df.duplicated().sum()  
+        # Percentage of missing values
+    dup_percent = 100 * dup / len(df)
+        # Make a table with the results
+    mis_val_table = pd.concat([mis_val, mis_val_percent], axis=1)
+        # Rename the columns
+    mis_val_table_ren_columns = mis_val_table.rename(columns = {0 : 'Missing Values', 1 : '% of Total Values'})
+        # Sort the table by percentage of missing descending
+    mis_val_table_ren_columns = mis_val_table_ren_columns[
+    mis_val_table_ren_columns.iloc[:,1] != 0].sort_values('% of Total Values', ascending=False).round(1)
+        # Print some summary information
+    print ("Your selected dataframe has " + str(df.shape[1]) + " columns.\n"      
+           "There are " + str(mis_val_table_ren_columns.shape[0]) +
+           " columns that have missing values.")
+    print( "  ")
+    print (f"** There are {dup} duplicate rows that represents {round(dup_percent, 2)}% of total Values**")
+        # Return the dataframe with missing information
+    return mis_val_table_ren_columns
+    
 def remove_outliers(df, col_list, k=1.5):
     for col in col_list:
         
@@ -124,31 +153,6 @@ def create_features(df):
 
     return df
 
-def split_zillow(df, target):
-    '''
-    this function takes in the zillow dataframe
-    splits into train, validate and test subsets
-    then splits for X (features) and y (target)
-    '''
-    
-    # split df into 20% test, 80% train_validate
-    train_validate, test = train_test_split(df, test_size=0.2, random_state=1234)
-    
-    # split train_validate into 30% validate, 70% train
-    train, validate = train_test_split(train_validate, test_size=0.3, random_state=1234)
-    
-    # Split with X and y
-    X_train = train.drop(columns=[target])
-    y_train = train[target]
-    
-    X_validate = validate.drop(columns=[target])
-    y_validate = validate[target]
-    
-    X_test = test.drop(columns=[target])
-    y_test = test[target]
-    
-    return train, validate, test, X_train, y_train, X_validate, y_validate, X_test, y_test
-
 def prepare_zillow(df):
     
     # set index to parcelid
@@ -184,3 +188,28 @@ def prepare_zillow(df):
     df = df.dropna()
  
     return df
+
+def split_zillow(df, target):
+    '''
+    this function takes in the zillow dataframe
+    splits into train, validate and test subsets
+    then splits for X (features) and y (target)
+    '''
+    
+    # split df into 20% test, 80% train_validate
+    train_validate, test = train_test_split(df, test_size=0.2, random_state=1234)
+    
+    # split train_validate into 30% validate, 70% train
+    train, validate = train_test_split(train_validate, test_size=0.3, random_state=1234)
+    
+    # Split with X and y
+    X_train = train.drop(columns=[target])
+    y_train = train[target]
+    
+    X_validate = validate.drop(columns=[target])
+    y_validate = validate[target]
+    
+    X_test = test.drop(columns=[target])
+    y_test = test[target]
+    
+    return train, validate, test, X_train, y_train, X_validate, y_validate, X_test, y_test
