@@ -76,15 +76,15 @@ After preparing the data, the remaining features and values are listed below:
 
 #### Initial Hypotheses
 
-> - **Hypothesis 1 -** Rejected the Null Hypothesis; the mean logerror is NOT the same between 4 or less bathrooms group and over 4 bathrooms group.
+> - **Hypothesis 1 -** Rejected the Null Hypothesis; the logerror is NOT the same between 4 or less bathrooms group and over 4 bathrooms group.
 > - alpha = .05
-> - $H_0$: The mean logerror for properties with 4 or less bathrooms is the same as the mean logerror for properties with more than 4 bathrooms. 
-> - $H_a$: The mean logerror for properties with 4 or less bathrooms is NOT the same as the mean logerror for properties with more than 4 bathrooms.
+> - $H_0$: The logerror for properties with 4 or less bathrooms is the same as the mean logerror for properties with more than 4 bathrooms. 
+> - $H_a$: The logerror for properties with 4 or less bathrooms is NOT the same as the mean logerror for properties with more than 4 bathrooms.
 
-> - **Hypothesis 2 -** Rejected the Null Hypothesis; the mean logerror is NOT the same between 4 or less bedrooms group and over 4 bedrooms group.
+> - **Hypothesis 2 -** Rejected the Null Hypothesis; the logerror is NOT the same between 4 or less bedrooms group and over 4 bedrooms group.
 > - alpha = .05
-> - $H_0$: The mean logerror for properties with 4 or less bedrooms is the same as the mean logerror for properties with more than 4 bedrooms. 
-> - $H_a$: The mean logerror for properties with 4 or less bedrooms is NOT the same as the mean logerror for properties with more than 4 bedrooms.
+> - $H_0$: The logerror for properties with 4 or less bedrooms is the same as the mean logerror for properties with more than 4 bedrooms. 
+> - $H_a$: The logerror for properties with 4 or less bedrooms is NOT the same as the mean logerror for properties with more than 4 bedrooms.
 
 <hr style="border-top: 10px groove blueviolet; margin-top: 1px; margin-bottom: 1px"></hr>
 
