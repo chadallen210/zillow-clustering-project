@@ -57,7 +57,7 @@ After preparing the data, the remaining features and values are listed below:
 | parcelid        | Unique identifier assigned to each property, set as index    | int64     |
 | bathrooms       | Number of bathrooms                                          | float64   |
 | bedrooms        | Number of bedrooms                                           | float64   |
-| square_feet     | Square feet of the property                                  | float64   |
+| square_feet     | Square feet of the structure                                 | float64   |
 | county_code     | FIPS county code for location of property                    | float64   |
 | latitude        | Latitude of the middle of the lot                            | float64   |
 | longitude       | Longitude of the middle of the lot                           | float64   |
@@ -81,7 +81,7 @@ After preparing the data, the remaining features and values are listed below:
 > - $H_0$: The mean logerror for properties with 4 or less bathrooms is the same as the mean logerror for properties with more than 4 bathrooms. 
 > - $H_a$: The mean logerror for properties with 4 or less bathrooms is NOT the same as the mean logerror for properties with more than 4 bathrooms.
 
-> - **Hypothesis 2 -** Rejected the Null Hypothesis; the mean logerror is NOT the same between 4or less bedrooms group and over 4 bedrooms group.
+> - **Hypothesis 2 -** Rejected the Null Hypothesis; the mean logerror is NOT the same between 4 or less bedrooms group and over 4 bedrooms group.
 > - alpha = .05
 > - $H_0$: The mean logerror for properties with 4 or less bedrooms is the same as the mean logerror for properties with more than 4 bedrooms. 
 > - $H_a$: The mean logerror for properties with 4 or less bedrooms is NOT the same as the mean logerror for properties with more than 4 bedrooms.
