@@ -37,7 +37,7 @@ This notebook consists of continued work from the regression project, incorporat
 > -- create clusters and use visualizations and statistical testing to determine if they are useful
 > - Model and Evaluate the data
 > -- establish the baseline
-> -- use features and cluster to in regression models
+> -- use features and cluster in regression models
 > - Use best model on test data
 > - Conclusions
 
