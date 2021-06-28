@@ -14,7 +14,7 @@ Zillow: What is driving the errors in the Zestimates?
 
 For this project, work will continue with the Zillow dataset using the 2017 properties and predictions data for single unit / single family homes.
 
-This notebook consists of continued work from the regression project, incorporating clustering methodologies to help uncover drivers of the error in Zestimates.
+This notebook consists of work continued from the regression project, incorporating clustering methodologies to help uncover drivers of the error in Zestimates.
 
 #### Goals
 > - Identify the drivers(features) for errors in Zestimates by incorporating clustering methodologies.
@@ -93,7 +93,7 @@ After preparing the data, the remaining features and values are listed below:
 > - Created and explored 3 clusters - combined 'square_feet' and 'acres' into 'overall_size' cluster, combined 'bath_bed_ratio' and 'appraised_value' into 'bbratio_value' cluster, and combined 'taxrate' and 'age' into 'taxrate_age' cluster.
 > - Created 4 regression models - 2 OLS(LinearRegression) models, LassoLars, and Polynomial Regression - and tested them with a list of 3 features - 'bathrooms', 'taxrate', 'acres', and the 'bbratio_value' cluster to predict the target value of 'logerror'.
 > - 3 of the models were better at predicting the 'logerror' than the baseline but by a very small margin (less than 1%). Only LassoLars did not outperform the baseline.
-> - Chose the Polynomial Regression model as the best model with lowest RMSE value. Even though the model outperformed the baseline, it has almost no value.
+> - Chose the Polynomial Regression model as the best model with lowest RMSE value. Even though the model outperformed the baseline on test data, it has almost no value.
 
 <hr style="border-top: 10px groove blueviolet; margin-top: 1px; margin-bottom: 1px"></hr>
 
