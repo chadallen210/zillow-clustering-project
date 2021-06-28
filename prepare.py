@@ -3,16 +3,21 @@ import pandas as pd
 import numpy as np
 import scipy.stats as stats
 
-# Visualizing
 import matplotlib.pyplot as plt
 import seaborn as sns
-
 
 from sklearn.impute import SimpleImputer
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 
+##### FUNCTIONS #####
 def nulls_by_col(df):
+    '''
+    This function determines how many null values there are in each column, and returns a pandas DataFrame
+    with 3 columns, index=column name, 
+    num_missing=number of missing values per columnm, 
+    prcnt_miss=what percent of each column is null.
+    '''
     num_missing = df.isnull().sum()
     print(type(num_missing))
     rows = df.shape[0]
@@ -21,6 +26,13 @@ def nulls_by_col(df):
     return cols_missing
 
 def nulls_by_row(df):
+    '''
+    This function determines how many null values there are in each row, and returns a pandas DataFrame
+    with 4 columns, index=index, 
+    num_missing=number of missing values per row, 
+    prcnt_miss=what percent of each row is null,
+    num_rows=how many rows are missing this many values.
+    '''
     num_missing = df.isnull().sum(axis=1)
     percent_missing = num_missing / df.shape[1] * 100
     rows_missing = pd.DataFrame({'num_cols_missing': num_missing, 'percent_cols_missing': percent_missing})\
@@ -31,7 +43,13 @@ def nulls_by_row(df):
 
 def summarize(df):
     '''
-    summarize 
+    This function will take in a single argument (pandas DF)
+    and output to console various statistics on said DF, including:
+    # .head()
+    # .info()
+    # .describe()
+    # value_counts()
+    # observe null values
     '''
     print('==============================================')
     print('DataFrame head: ')
@@ -49,9 +67,10 @@ def summarize(df):
     for col in df.columns:
         if col in cat_col:
             print(df[col].value_counts())
+            print('==============================================')
         else:
             print(df[col].value_counts(bins=10, sort=False))
-    print('==============================================')
+            print('==============================================')
     print('nulls in dataframe by column: ')
     print(nulls_by_col(df))
     print('==============================================')
@@ -87,20 +106,6 @@ def miss_dup_values(df):
         # Return the dataframe with missing information
     return mis_val_table_ren_columns
     
-def remove_outliers(df, col_list, k=1.5):
-    for col in col_list:
-        
-        q1, q3 = df[col].quantile([0.25, 0.75])
-        iqr = q3 - q1
-    
-        upper_bound = q3 + k * iqr
-        lower_bound = q1 - k * iqr
-    
-        df = df[df[col] > lower_bound]
-        df = df[df[col] < upper_bound]
-    
-    return df
-
 def handle_missing_values(df, prop_required_column=0.5, prop_required_row=0.75):
     '''
     takes in a df and amount of required proportion for each row and column
@@ -114,24 +119,6 @@ def handle_missing_values(df, prop_required_column=0.5, prop_required_row=0.75):
     row_threshold = int(round(prop_required_row * len(df.columns),0))
     df.dropna(axis=0, thresh=row_threshold, inplace=True)
     
-    return df
-
-def get_counties(df):
-    '''
-    This function will create dummy variables out of the original fips column. 
-    And return a dataframe with all of the original columns except regionidcounty.
-    We will keep fips column for data validation after making changes. 
-    New columns added will be 'LA', 'Orange', and 'Ventura' which are boolean 
-    The fips ids are renamed to be the name of the county each represents. 
-    '''
-    # create dummy variables of fips id
-    county_df = pd.get_dummies(df.fips)
-    # rename columns by actual county name
-    county_df.columns = ['LA', 'Orange', 'Ventura']
-    # concatenate the dataframe with the 3 county columns to the original dataframe
-    df = pd.concat([df, county_df], axis = 1)
-    # drop regionidcounty and fips columns
-    df = df.drop(columns = ['regionidcounty'])
     return df
 
 def create_features(df):
@@ -154,7 +141,13 @@ def create_features(df):
     return df
 
 def prepare_zillow(df):
-    
+    '''
+    this function takes in the dataframe and prepares it for analysis specific to the clustering project
+    operations include: set_index, filtering for property type, dropping rows and columns based on the amount
+    of missing values in each, creating features, dropping and renaming columns, removing outliers, and dropping
+    any leftover nulls
+    returns a dataframe that is ready for exploration
+    '''
     # set index to parcelid
     df.set_index('parcelid', drop=True, inplace=True)
     
@@ -165,7 +158,7 @@ def prepare_zillow(df):
     df = handle_missing_values(df)
     
     # create feature for analysis
-    df = wrangle_zillow.create_features(df)
+    df = create_features(df)
     
     # drop columns with redundant information and unneeded columns
     df = df.drop(columns=['propertylandusetypeid', 'heatingorsystemtypeid', 'id', 'buildingqualitytypeid', \
@@ -173,7 +166,7 @@ def prepare_zillow(df):
                           'propertycountylandusecode', 'propertyzoningdesc', 'censustractandblock', \
                          'rawcensustractandblock', 'roomcnt', 'unitcnt', 'assessmentyear', \
                           'propertylandusedesc','transactiondate', 'heatingorsystemdesc', 'regionidcity', \
-                          'regionidzip', 'yearbuilt'])
+                          'regionidzip', 'yearbuilt', 'regionidcounty'])
     
     # rename columns
     df = df.rename(columns={'bathroomcnt': 'bathrooms', 'bedroomcnt': 'bedrooms', 'calculatedfinishedsquarefeet': 'square_feet', \
@@ -213,3 +206,15 @@ def split_zillow(df, target):
     y_test = test[target]
     
     return train, validate, test, X_train, y_train, X_validate, y_validate, X_test, y_test
+
+def Min_Max_Scaler(X_train, X_validate, X_test):
+    """
+    Takes in X_train, X_validate and X_test dfs with numeric values only
+    Returns scaler, X_train_scaled, X_validate_scaled, X_test_scaled dfs 
+    """
+    scaler = MinMaxScaler().fit(X_train)
+    X_train_scaled = pd.DataFrame(scaler.transform(X_train), index = X_train.index, columns = X_train.columns)
+    X_validate_scaled = pd.DataFrame(scaler.transform(X_validate), index = X_validate.index, columns = X_validate.columns)
+    X_test_scaled = pd.DataFrame(scaler.transform(X_test), index = X_test.index, columns = X_test.columns)
+    
+    return X_train_scaled, X_validate_scaled, X_test_scaled
